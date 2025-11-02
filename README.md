@@ -63,3 +63,4 @@ Whether you’re diving into the latest manga chapters or discovering detailed a
    ```bash
    git clone https://github.com/kaliprogramer/MangaFlix-and-Aniflix-best-website-for-reading-manga-and-info-for-anime-.git
    cd MangaFlix-and-Aniflix-best-website-for-reading-manga-and-info-for-anime-
+   python manage.py runserver
