@@ -1,0 +1,177 @@
+{% extends "base.html" %}
+{% block content %}
+<div id="toast" class="toast">
+  Welcome to Aniflix
+  <div class="toast-progress"></div>
+</div>
+
+<script>
+  function showToast() {
+    const toast = document.getElementById("toast");
+    toast.classList.add("show");
+
+    // Hide after 5s
+    setTimeout(() => {
+      toast.classList.remove("show");
+    }, 3000);
+  }
+
+  // Trigger on page load (you can call this after data loads)
+  window.onload = showToast;
+</script>
+
+      <!-- 🔻 Anime Section-->
+    <div class="" id="anime">
+
+
+
+
+      <!-- 🔻 Anime Cards Grid -->
+  {% for banner in banners %}
+    <section class="flex-1 p-4 overflow-y-auto">
+      <!-- Hero Banner -->
+      <div class="h-64 md:h-80 rounded-xl overflow-hidden relative mb-8">
+        <div class="absolute inset-0 bg-gradient-to-r from-black via-transparent to-transparent z-10"></div>
+        <div class="absolute inset-0 z-10 p-[20px]"><p class="text-purple-600  text-white text-sm  font-semibold  ">
+    Creator: Kiran K.C
+  </p></div>
+
+        <img src="{{ banner.image.url }}" class="w-full h-full object-cover  bg-cover bg-bottom" alt="Featured Anime">
+        <div class="absolute bottom-0 left-0 p-6 z-20 w-full">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="text-xs font-bold bg-red-600 px-2 py rounded">LIVE</span>
+            <span class="text-xs font-bold bg-violet-600  py rounded">NEW EPISODE</span>
+          </div>
+          <h2 class="text-xl md:text-4xl font-bold text-white glow">{{ banner.title }}: Entertainment District Arc</h2>
+          <div class="flex gap-4 mt-3">
+            <a href="{% url 'save' %}" class="bg-violet-600 md:text-2xl hover:bg-violet-700 md:px-5 md:py-2 rounded-lg flex items-center gap-2 transition p-2 ">
+              <i class="fas fa-play"></i> Watch Now
+            </a>
+            <a href="{% url 'save' %}" class="bg-gray-700 hover:bg-gray-600 md:px-4 md:py-2 py-1 px-1 rounded-lg flex items-center gap-2 transition md:text-2xl p-2">
+              <i class="fas fa-plus"></i> Add to List
+            </a>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+
+      <!-- Section Heading -->
+      <div class="flex items-center justify-between mb-6">
+        <h2 class="text-2xl md:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-violet-400 to-purple-600 animate-fadeInUp">🔥 Trending Now</h2>
+        <a href="{% url 'views' %}?q=" class="text-violet-400 text-sm flex items-center gap-1 hover:text-purple-300 transition">
+          View All <i class="fas fa-arrow-right text-xs"></i>
+        </a>
+      </div>
+
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+        <!-- Anime Card Template -->
+
+
+
+   {% for anime in animes|slice:":20" %}
+  <a href="{% url 'detail' anime.id %}">
+    <div class="hologram-card card-hover relative group animate-fadeInUp overflow-hidden rounded-lg bg-gray-900">
+
+      <!-- Aspect-ratio image container (2:3 ratio like anime posters) -->
+      <div class="aspect-[2/3] w-full relative">
+        <img src="{{ anime.image_url }}" alt="{{ anime.title }}"
+             class="absolute inset-0 w-full h-full object-cover transition duration-500 group-hover:scale-105">
+        <div class="absolute top-2 right-2 bg-black/60 px-2 py-1 rounded text-xs font-bold text-violet-300">HD</div>
+        <button class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
+          <div class="w-12 h-12 rounded-full bg-violet-600 flex items-center justify-center hover:bg-violet-500 transition">
+            <i class="fas fa-play text-white"></i>
+          </div>
+        </button>
+      </div>
+
+      <div class="p-3">
+        <h3 class="text-md font-semibold text-violet-300 truncate">{{ anime.title }}</h3>
+        <p class="text-xs text-gray-400 mt-1 flex justify-between">
+          <span>{{ anime.genres }}</span>
+          <span class="text-yellow-400"><i class="fas fa-star mr-1"></i>{{ anime.score }}</span>
+        </p>
+      </div>
+
+    </div>
+  </a>
+{% endfor %}
+
+
+
+
+
+
+
+      </div>
+    </a>
+
+
+
+
+
+
+
+
+      <!-- Recently Added Section -->
+      <div class="flex items-center justify-between mt-10 mb-6">
+        <h2 class="text-2xl md:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-violet-400 to-purple-600 animate-fadeInUp">🆕 Recently Added</h2>
+        <a href="{% url 'views' %}?q=recent" class="text-violet-400 text-sm flex items-center gap-1 hover:text-purple-300 transition">
+          View All <i class="fas fa-arrow-right text-xs"></i>
+        </a>
+      </div>
+
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+        <!-- Additional cards -->
+
+{% for anime in animes %}
+  {% if anime.genres != "Hentai" and anime.status == "Currently Airing" %}
+    <a href="{% url 'detail' anime.id %}">
+      <div class="hologram-card card-hover relative group animate-fadeInUp overflow-hidden rounded-lg bg-gray-900">
+
+        <!-- Fixed Aspect Ratio Container (Anime Poster Style) -->
+        <div class="aspect-[2/3] w-full relative">
+          <img src="{{ anime.image_url }}" alt="{{ anime.title }}"
+               class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition duration-500">
+          <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-70"></div>
+          <div class="absolute top-2 right-2 bg-black/60 px-2 py-1 rounded text-xs font-bold text-violet-300">NEW</div>
+          <button class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
+            <div class="w-12 h-12 rounded-full bg-violet-600 flex items-center justify-center hover:bg-violet-500 transition">
+              <i class="fas fa-play text-white"></i>
+            </div>
+          </button>
+        </div>
+
+        <div class="p-3">
+          <h3 class="text-md font-semibold text-violet-300 truncate">{{ anime.title }}</h3>
+          <p class="text-xs text-gray-400 mt-1 flex justify-between">
+            <span>{{ anime.genres }}</span>
+            <span class="text-yellow-400"><i class="fas fa-star mr-1"></i>{{ anime.score }}</span>
+          </p>
+        </div>
+
+      </div>
+    </a>
+  {% endif %}
+{% endfor %}
+
+
+
+
+
+      </div>
+
+<div style="height: 40px; width: 2px;"></div>
+
+    </section>
+
+    </div>
+
+
+
+
+
+
+
+
+
+{% endblock %}

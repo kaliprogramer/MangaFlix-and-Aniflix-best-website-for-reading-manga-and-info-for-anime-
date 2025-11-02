@@ -1,0 +1,108 @@
+{% extends "manga_base.html" %}
+{% block content %}
+
+<div id="reader" style="text-align:center; padding:5px">
+    <p id="loadingMsg">Loading chapter...</p>
+</div>
+
+<div style="text-align:center; margin-top:20px;" class="flex gap-[50px] align-center justify-center">
+    <button id="prevBtn" class=" text-white bg-green-900">Previous Chapter</button>
+    <button id="nextBtn" class="p-4 text-white bg-green-900">Next Chapter</button>
+</div>
+
+<script>
+// Get data from Django context
+const chapterList = {{ chapter_list|safe }} || [];
+let currentIndex = {{ current_index|default:0 }};
+const mangaId = "{{ manga_id }}";
+const reader = document.getElementById("reader");
+
+// Function to load images for a chapter
+async function loadChapterImages(chapterIndex) {
+    reader.innerHTML = "<p>Loading chapter...</p>";
+
+    if (!chapterList[chapterIndex]) {
+        reader.innerHTML = "<p>Chapter not found.</p>";
+        return;
+    }
+
+    const chapterId = chapterList[chapterIndex];
+
+    try {
+        // Use absolute path starting from root
+        const response = await fetch(`/manga/get_chapter/${chapterId}/`);
+        if (!response.ok) throw new Error("Failed to fetch chapter data");
+
+        const data = await response.json();
+        const baseUrl = data.baseUrl;
+        const hash = data.chapter.hash;
+        const images = data.chapter.dataSaver || data.chapter.data || [];
+
+        if (images.length === 0) {
+            reader.innerHTML = "<p>No images available for this chapter.</p>";
+            return;
+        }
+
+        reader.innerHTML = ""; // Clear loading message
+
+        // Load images one by one for smoother rendering
+        let i = 0;
+        function loadNextImage() {
+            if (i >= images.length) return;
+
+            const img = new Image();
+            img.src = `${baseUrl}/data-saver/${hash}/${images[i]}`;
+            img.style.display = "block";
+            img.style.margin = "auto";
+            img.style.maxWidth = "100%";
+
+            img.onload = () => {
+                reader.appendChild(img);
+                i++;
+                loadNextImage();
+            };
+
+            img.onerror = () => {
+                console.error("Failed to load:", img.src);
+                i++;
+                loadNextImage();
+            };
+        }
+
+        // Start loading the first image immediately
+        loadNextImage();
+
+    } catch (err) {
+        console.error(err);
+        reader.innerHTML = "<p>Failed to load chapter. Please try again later.</p>";
+    }
+}
+
+// Initial load
+if (chapterList.length > 0) {
+    loadChapterImages(currentIndex);
+} else {
+    reader.innerHTML = "<p>No chapters available.</p>";
+}
+
+// Navigation buttons
+document.getElementById("prevBtn").addEventListener("click", () => {
+    if (currentIndex > 0) {
+        currentIndex--;
+        loadChapterImages(currentIndex);
+    } else {
+        alert("This is the first chapter");
+    }
+});
+
+document.getElementById("nextBtn").addEventListener("click", () => {
+    if (currentIndex < chapterList.length - 1) {
+        currentIndex++;
+        loadChapterImages(currentIndex);
+    } else {
+        alert("This is the last chapter");
+    }
+});
+</script>
+
+{% endblock %}

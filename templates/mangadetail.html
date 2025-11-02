@@ -1,0 +1,457 @@
+{% extends "manga_base.html" %}
+{% block content %}
+
+
+ <style>
+        :root {
+            --bg-primary: #f5f5f5;
+            --bg-secondary: #ffffff;
+            --text-primary: #333333;
+            --text-secondary: #666666;
+            --accent: #ff6b6b;
+            --accent-dark: #ff5252;
+            --tag-bg: #e0e0e0;
+            --header-border: #dddddd;
+            --shadow: rgba(0, 0, 0, 0.1);
+            --chapter-hover: #f9f9f9;
+            --footer-border: #dddddd;
+        }
+        #unwanted{
+        display: none;
+        }
+
+        .night-mode {
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #2d2d2d;
+            --text-primary: #f0f0f0;
+            --text-secondary: #b0b0b0;
+            --accent: #ff7f7f;
+            --accent-dark: #ff6b6b;
+            --tag-bg: #444444;
+            --header-border: #444444;
+            --shadow: rgba(0, 0, 0, 0.3);
+            --chapter-hover: #3d3d3d;
+            --footer-border: #444444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid var(--header-border);
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .search-bar {
+            display: flex;
+            width: 50%;
+        }
+
+        .search-bar input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 2px solid var(--header-border);
+            border-radius: 4px 0 0 4px;
+            font-size: 16px;
+            background-color: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+
+        .search-bar button {
+            padding: 12px 20px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .theme-toggle {
+            background: var(--tag-bg);
+            border: none;
+            width: 60px;
+            height: 30px;
+            border-radius: 15px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .theme-toggle::before {
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 24px;
+            height: 24px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.3s;
+        }
+
+        .night-mode .theme-toggle::before {
+            transform: translateX(30px);
+            background: #2d2d2d;
+        }
+
+        .theme-toggle i {
+            position: absolute;
+            top: 6px;
+            font-size: 18px;
+        }
+
+        .theme-toggle .fa-sun {
+            left: 6px;
+            color: #ffc107;
+        }
+
+        .theme-toggle .fa-moon {
+            right: 6px;
+            color: #f0f0f0;
+        }
+
+        .user-actions a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            margin-left: 20px;
+            font-size: 16px;
+        }
+
+        .manga-detail {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 40px;
+            background: var(--bg-secondary);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px var(--shadow);
+        }
+
+        .manga-cover {
+            flex: 0 0 300px;
+        }
+
+        .manga-cover img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .manga-info {
+            flex: 1;
+            padding: 25px;
+        }
+
+        .manga-title {
+            font-size: 32px;
+            margin-bottom: 10px;
+            color: var(--text-primary);
+        }
+
+        .manga-meta {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            color: var(--text-secondary);
+        }
+
+        .rating {
+            color: #ffc107;
+        }
+
+        .status {
+            background: #4caf50;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .tags {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            background: var(--tag-bg);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            color: var(--text-primary);
+        }
+
+        .synopsis {
+            margin-bottom: 25px;
+            line-height: 1.8;
+            color: var(--text-secondary);
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .detail-item {
+            display: flex;
+        }
+
+        .detail-label {
+            flex: 0 0 120px;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .detail-value {
+            color: var(--text-primary);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-dark);
+        }
+
+        .btn-secondary {
+            background: var(--tag-bg);
+            color: var(--text-primary);
+        }
+
+        .chapters {
+            background: var(--bg-secondary);
+            border-radius: 10px;
+            padding: 5px;
+            box-shadow: 0 5px 15px var(--shadow);
+            text-align: center;
+        }
+
+        .section-title {
+            font-size: 24px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--header-border);
+        }
+
+        .chapter-list {
+            list-style: none;
+        }
+
+        .chapter-item {
+            padding: 15px;
+            border-bottom: 1px solid var(--header-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chapter-item:hover {
+            background: var(--chapter-hover);
+        }
+
+        .chapter-title {
+            font-weight: 500;
+        }
+
+        .chapter-date {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .read-btn {
+            padding: 8px 15px;
+            background: #4caf50;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            margin-top: 50px;
+            color: var(--text-secondary);
+            border-top: 1px solid var(--footer-border);
+        }
+
+        @media (max-width: 900px) {
+            .manga-detail {
+                flex-direction: column;
+            }
+
+            .manga-cover {
+                flex: 0 0 auto;
+                max-width: 300px;
+                margin: 0 auto;
+            }
+
+            .details-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .search-bar {
+                width: 100%;
+                margin: 15px 0;
+            }
+
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .header-controls {
+                margin-top: 15px;
+                width: 100%;
+                justify-content: space-between;
+            }
+        }
+    </style>
+
+    <div class="sm:mx-10 mx-4 mb-6">
+
+            <button class="theme-toggle relative right-0 top-0">
+    <i class="fas fa-sun"></i>
+    <i class="fas fa-moon"></i>
+</button>
+
+        <main>
+
+            <div class="manga-detail">
+                <div class="manga-cover">
+                    <img src="{{ result.image_url }}" alt="{{ result.title }}">
+                </div>
+                <div class="manga-info">
+                    <h1 class="manga-title">{{ result.title }}</h1>
+                    <div class="manga-meta">
+
+                        <div class="status">{{ result.status }}</div>
+                        <div class="chapters">{{ total_chapters }} Chapters</div>
+                    </div>
+
+                    <div class="tags">
+                        {% for genre in genres_list %}
+                        <span class="tag">{{genre}}</span>
+                        {% endfor %}
+                    </div>
+                    <p class="synopsis">
+                        {{ result.description }}
+                    </p>
+
+                    <div class="action-buttons">
+                        <a href="{% url 'chapter_reading' manga_id=manga_id chapter_index=0 %}" class="btn btn-primary"><i class="fas fa-book"></i> Start Reading</a>
+                        <a href="{% url 'save_bookmark' manga_id  %}" class="btn btn-secondary"><i class="fas fa-bookmark"></i> Bookmark</a>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="chapters">
+                <h2 class="section-title">Chapters</h2>
+                <ul class="chapter-list">
+                    {% for chapter in chapters_list %}
+                    <li class="chapter-item">
+                        <span class="chapter-title">Chapter {{ chapter.chapter }}: {{ chapter.title }}</span>
+                        <span class="chapter-date">Sep 18, 2014</span>
+                        <a href="{% url 'chapter_reading' manga_id=manga_id chapter_index=forloop.counter0 %}" class="read-btn">Read</a>
+
+
+                    </li>
+                    {% endfor %}
+
+                </ul>
+            </div>
+        </main>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const themeToggle = document.querySelector('.theme-toggle');
+            const body = document.body;
+
+            // Check for saved theme preference
+            if (localStorage.getItem('nightMode') === 'enabled') {
+                body.classList.add('night-mode');
+            }
+
+            // Theme toggle functionality
+            themeToggle.addEventListener('click', function() {
+                body.classList.toggle('night-mode');
+
+                // Save user preference
+                if (body.classList.contains('night-mode')) {
+                    localStorage.setItem('nightMode', 'enabled');
+                } else {
+                    localStorage.setItem('nightMode', 'disabled');
+                }
+            });
+
+
+
+            const actionButtons = document.querySelectorAll('.btn');
+
+
+        });
+    </script>
+
+
+
+
+
+
+  {% endblock %}

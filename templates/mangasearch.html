@@ -1,0 +1,102 @@
+{% extends "manga_base.html" %}
+{% block content %}
+    <!-- Results Section -->
+    <div class="flex-1 p-4 w-full">
+        <div class="mb-8 flex items-center justify-between">
+            <h2 class="text-2xl md:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-violet-400 to-purple-600">
+                <i class="fas fa-search mr-3"></i>Search Results for "{{ query }}"
+            </h2>
+            <div class="text-sm text-violet-400 md:flex invisible">
+                <span class="bg-violet-900/40 px-3 py-1 rounded-full"> :  results</span>
+            </div>
+        </div>
+        {% if results %}
+<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5">
+    {% for manga in results %}
+    <div class="hologram-card animate-fadeIn card-delay-1">
+        <a href="{% url "mangadetail" manga.manga_id %}">
+            <div class="group relative overflow-hidden rounded-t-lg aspect-[2/3]">
+                <img src="{{ manga.image_url }}" alt="{{ anime.title }}" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+                <div class="absolute top-3 right-3 bg-violet-600 px-2 py-1 rounded text-xs font-bold">
+                    {{ manga.score }} ★
+                </div>
+                <div class="absolute bottom-0 left-0 right-0 p-3">
+                    <h3 class="font-semibold text-white text-sm md:text-base truncate">
+                        {{ manga.title }}
+                    </h3>
+                    <div class="flex items-center mt-1">
+                        <span class="bg-red-600 text-white px-2 py-0.5 rounded text-xs mr-2">
+                            {{ manga.status }}
+                        </span>
+                        <span class="text-xs text-violet-300">
+                            HD
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="p-3 text-xs text-gray-400">
+                <div class="flex justify-between items-center">
+
+                    <span>{{ manga.chapter }} Chapter</span>
+                </div>
+            </div>
+        </a>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<p class="text-center text-gray-500 mt-8">No results found.</p>
+{% endif %}
+
+
+
+
+
+
+
+
+        </div>
+
+        {% if results.has_other_pages %}
+  <div class="mt-10 flex justify-center">
+    <div class="flex items-center space-x-2">
+
+      {% if results.has_previous %}
+        <a href="?q={{ query }}&page={{ results.previous_page_number }}" class="h-10 w-10 rounded-full bg-violet-700 flex items-center justify-center hover:bg-violet-600 transition text-white">
+          <i class="fas fa-chevron-left text-sm"></i>
+        </a>
+      {% endif %}
+
+      {% if results.number > 3 %}
+        <a href="?q={{ query }}&page=1" class="text-white">1</a>
+        <span class="text-gray-400">...</span>
+      {% endif %}
+
+      {% for num in results.paginator.page_range %}
+        {% if num >= results.number|add:"-2" and num <= results.number|add:"2" %}
+          {% if num == results.number %}
+            <span class="h-10 w-10 rounded-full bg-violet-600 flex items-center justify-center text-white">{{ num }}</span>
+          {% else %}
+            <a href="?q={{ query }}&page={{ num }}" class="h-10 w-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-gray-700 transition text-white">{{ num }}</a>
+          {% endif %}
+        {% endif %}
+      {% endfor %}
+
+      {% if results.number < results.paginator.num_pages|add:"-2" %}
+        <span class="text-gray-400">...</span>
+        <a href="?q={{ query }}&page={{ results.paginator.num_pages }}" class="text-white">{{ results.paginator.num_pages }}</a>
+      {% endif %}
+
+      {% if results.has_next %}
+        <a href="?q={{ query }}&page={{ results.next_page_number }}" class="h-10 w-10 rounded-full bg-violet-700 flex items-center justify-center hover:bg-violet-600 transition text-white">
+          <i class="fas fa-chevron-right text-sm"></i>
+        </a>
+      {% endif %}
+
+    </div>
+  </div>
+{% endif %}
+
+
+{% endblock %}

@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+{% block content %}
+<div id="toast-container" class="fixed top-20 right-5 z-50 space-y-2">
+    {% if messages %}
+        {% for message in messages %}
+            {% if forloop.first %}  {# Show only once #}
+                <div class="toast-message {{ message.tags }}
+                    {% if message.tags == 'success' %}bg-green-600
+                    {% elif message.tags == 'error' %}bg-red-600
+                    {% elif message.tags == 'warning' %}bg-yellow-500
+                    {% else %}bg-gray-800
+                    {% endif %}
+                    text-white px-4 py-3 rounded-lg shadow-lg max-w-sm w-full"
+                >
+                    {{ message }}
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+</div>
+
+<script>
+    setTimeout(() => {
+        const toast = document.querySelector('.toast-message');
+        if (toast) {
+            toast.style.opacity = '0';
+            setTimeout(() => toast.remove(), 500);
+        }
+    }, 5000);
+</script>
+
+
+
+    <!-- Search Box -->
+
+
+    <!-- Results Section -->
+    <div class="flex-1 p-4  w-full">
+
+        {% if results %}
+<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5">
+    {% for anime in results %}
+    <div class="hologram-card animate-fadeIn card-delay-1">
+        <a href="{% url 'detail' anime.anime_id %}">
+            <div class="group relative overflow-hidden rounded-t-lg aspect-[2/3]">
+                <img src="{{ anime.image_url }}" alt="{{ anime.title }}" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+                <div class="absolute top-3 right-3 bg-violet-600 px-2 py-1 rounded text-xs font-bold">
+                    {{ anime.score }} ★
+                </div>
+                <div class="absolute bottom-0 left-0 right-0 p-3">
+                    <h3 class="font-semibold text-white text-sm md:text-base truncate">
+                        {{ anime.title }}
+                    </h3>
+                    <div class="flex items-center mt-1">
+                        <span class="bg-red-600 text-white px-2 py-0.5 rounded text-xs mr-2">
+                            {{ anime.status }}
+                        </span>
+                        <span class="text-xs text-violet-300">
+                            HD
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="p-3 text-xs text-gray-400">
+                <div class="flex justify-between items-center">
+
+                    <span>{{ anime.episodes }} Episodes</span>
+                </div>
+            </div>
+        </a>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<p class="text-center text-gray-500 mt-8">No Data Saved.</p>
+{% endif %}
+
+
+
+
+
+
+
+
+        </div>
+
+       {% if results.has_other_pages %}
+  <div class="mt-10 flex justify-center">
+    <div class="flex items-center space-x-2">
+
+      {% if results.has_previous %}
+        <a href="?q={{ query }}&page={{ results.previous_page_number }}" class="h-10 w-10 rounded-full bg-violet-700 flex items-center justify-center hover:bg-violet-600 transition">
+          <i class="fas fa-chevron-left text-sm text-white"></i>
+        </a>
+      {% else %}
+        <span class="h-10 w-10 rounded-full bg-gray-700 flex items-center justify-center opacity-50">
+          <i class="fas fa-chevron-left text-sm text-white"></i>
+        </span>
+      {% endif %}
+
+      {% for num in results.paginator.page_range %}
+        {% if results.number == num %}
+          <span class="h-10 w-10 rounded-full bg-violet-600 flex items-center justify-center font-medium text-white">{{ num }}</span>
+        {% else %}
+          <a href="?q={{ query }}&page={{ num }}" class="h-10 w-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-gray-700 transition text-white">{{ num }}</a>
+        {% endif %}
+      {% endfor %}
+
+      {% if results.has_next %}
+        <a href="?q={{ query }}&page={{ results.next_page_number }}" class="h-10 w-10 rounded-full bg-violet-700 flex items-center justify-center hover:bg-violet-600 transition">
+          <i class="fas fa-chevron-right text-sm text-white"></i>
+        </a>
+      {% else %}
+        <span class="h-10 w-10 rounded-full bg-gray-700 flex items-center justify-center opacity-50">
+          <i class="fas fa-chevron-right text-sm text-white"></i>
+        </span>
+      {% endif %}
+
+    </div>
+  </div>
+{% endif %}
+
+
+    </div>
+
+  {% endblock %}

@@ -1,0 +1,219 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="container mx-auto px-4 py-6">
+        <!-- Back Button with Animation -->
+        <div class="mb-6">
+            <a href="/" class="back-btn text-purple-400 hover:text-white transition">
+                <i class="fas fa-arrow-left"></i> <span>Back to Series</span>
+            </a>
+        </div>
+
+        <!-- Video Player -->
+        <div class="mb-8 sm:visible hidden">
+            <div class="mb-2 rounded-[10px] scanlines w-full">
+                <img src="{{ anime.image_url }}" alt="{{ anime.title }}" class="w-full h-[60vh] object-cover group-hover:scale-105 transition duration-500">
+            </div>
+
+
+        </div>
+
+        <!-- Social Actions -->
+        <div class="flex flex-wrap gap-4 mb-8 sm:visible hidden">
+            <button class="social-btn text-purple-400 hover:text-white">
+                <i class="fas fa-heart"></i>
+                <span>2.4K Likes</span>
+            </button>
+            <button class="social-btn text-cyan-400 hover:text-white">
+                <i class="fas fa-share-alt"></i>
+                <span>Share</span>
+            </button>
+            <button class="social-btn text-yellow-400 hover:text-white">
+                <i class="fas fa-bookmark"></i>
+                <span>Save</span>
+            </button>
+            <button class="social-btn text-blue-400 hover:text-white">
+                <i class="fas fa-download"></i>
+                <span>Download</span>
+            </button>
+        </div>
+
+        <div class="flex flex-col lg:flex-row gap-8">
+            <!-- Left Column: Episodes -->
+            <div class="lg:w-1/3">
+                <!-- Episode Selection -->
+
+                <!-- Comments Section -->
+                <div class="holographic-card p-4 md:p-5 sm:visible hidden">
+                    <h3 class="text-xl font-bold text-white mb-4 cyber-font flex items-center">
+                        <i class="fas fa-comments mr-3 text-purple-500"></i>COMMENTS
+                    </h3>
+
+                    <div class="space-y-4">
+                        <!-- Comment 1 -->
+                        <div class="comment-bubble">
+                            <div class="flex items-center gap-3 mb-3">
+                                <div class="w-8 h-8 bg-gradient-to-r from-purple-600 to-blue-500 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-user text-white text-sm"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-white">CyberOtaku23</h4>
+                                    <p class="text-xs text-gray-400">2 hours ago</p>
+                                </div>
+                                <div class="ml-auto text-yellow-400">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                            </div>
+                            <p class="text-gray-300 text-sm md:text-base">This episode blew my mind! The animation during the netrunning sequence was absolutely stunning. Can't wait for the next one!</p>
+                            <div class="flex gap-4 mt-3">
+                                <button class="text-purple-400 text-sm flex items-center gap-1">
+                                    <i class="fas fa-heart"></i> 142
+                                </button>
+                                <button class="text-cyan-400 text-sm flex items-center gap-1">
+                                    <i class="fas fa-reply"></i> Reply
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Comment 2 -->
+                        <div class="comment-bubble">
+                            <div class="flex items-center gap-3 mb-3">
+                                <div class="w-8 h-8 bg-gradient-to-r from-purple-600 to-blue-500 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-user text-white text-sm"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-white">AnimeMaster</h4>
+                                    <p class="text-xs text-gray-400">5 hours ago</p>
+                                </div>
+                                <div class="ml-auto text-yellow-400">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                </div>
+                            </div>
+                            <p class="text-gray-300 text-sm md:text-base">David's character development in this episode was incredible. The writers are doing an amazing job with this series.</p>
+                            <div class="flex gap-4 mt-3">
+                                <button class="text-purple-400 text-sm flex items-center gap-1">
+                                    <i class="fas fa-heart"></i> 89
+                                </button>
+                                <button class="text-cyan-400 text-sm flex items-center gap-1">
+                                    <i class="fas fa-reply"></i> Reply
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Add Comment -->
+                    <div class="mt-6 flex gap-3 sm:visible hidden">
+                        <div class="flex-1">
+                            <input type="text" placeholder="Add a comment..." class="w-full px-4 py-3 rounded-full bg-[#151530] text-white focus:outline-none focus:ring-2 focus:ring-purple-600 transition-all border border-purple-900/50" />
+                        </div>
+                        <button class="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 px-5 py-3 rounded-full text-sm transition-all hover:shadow-lg hover:shadow-purple-900/50">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Anime Info -->
+            <div class="lg:w-2/3">
+                <!-- Anime Info -->
+                <div class="holographic-card overflow-hidden mb-8">
+                    <div class="p-4 md:p-5">
+                        <div class="flex flex-col md:flex-row gap-6">
+                            <div class="md:w-1/3">
+                                <img src="{{ anime.image_url }}" class="w-full rounded-lg" alt="Cyberpunk: Edgerunners">
+                            </div>
+                            <div class="md:w-2/3">
+                                <h2 class="text-2xl md:text-3xl font-bold text-white mb-2 cyber-font">{{ anime.title }}</h2>
+                                <div class="flex flex-wrap gap-2 mb-4">
+                                    <span class="text-xs bg-purple-600 px-2 py-1 rounded-full">{{ anime.genres }}</span>
+
+                                </div>
+                                <p class="text-gray-300 mb-4">
+                                    {{ anime.synopsis }}
+                                </p>
+                                <div class="grid grid-cols-2 gap-4 mb-4">
+                                    <div>
+                                        <span class="text-gray-400 block">Rating:</span>
+                                        <div class="flex items-center">
+                                            <span class="text-yellow-400 mr-2"><i class="fas fa-star"></i></span>
+                                            <span class="font-bold">{{ anime.score }}</span>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <span class="text-gray-400 block">Episodes:</span>
+                                        <span class="font-bold">{{ anime.episodes }}</span>
+                                    </div>
+                                    <div>
+                                        <span class="text-gray-400 block">Status:</span>
+                                        <span class="text-green-400 font-bold">{{ anime.status }}</span>
+                                    </div>
+                                    <div>
+                                        <span class="text-gray-400 block">Studio:</span>
+                                        <span class="font-bold">Trigger</span>
+                                    </div>
+                                </div>
+                                <div class="flex gap-3">
+                                    <a href="{% url 'save' %}?anime_id={{ anime.id }}" class="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 px-5 py-2.5 rounded-lg text-sm transition-all">
+                                        <i class="fas fa-plus mr-2"></i> Add to List
+                                    </a>
+                                    <button class="bg-[#151530] hover:bg-[#1a1a3a] px-4 py-2.5 rounded-lg text-sm transition-all border border-purple-900/50">
+                                        <i class="fas fa-share-alt mr-2"></i> Share
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Related Anime -->
+                <div class="holographic-card p-4 md:p-5">
+                    <h3 class="text-xl md:text-2xl font-bold text-white mb-6 cyber-font flex items-center">
+                        <i class="fas fa-thumbs-up mr-3 text-purple-500"></i>RELATED SERIES
+                    </h3>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <!-- Related 1 -->
+
+
+    {% for anime in related %}
+  <a href="{% url 'detail' anime.id %}">
+    <div class="hologram-card card-hover relative group animate-fadeInUp overflow-hidden rounded-lg bg-gray-900">
+
+      <!-- Aspect-ratio image container (2:3 ratio like anime posters) -->
+      <div class="aspect-[2/3] w-full relative">
+        <img src="{{ anime.image_url }}" alt="{{ anime.title }}"
+             class="absolute inset-0 w-full h-full object-cover transition duration-500 group-hover:scale-105">
+        <div class="absolute top-2 right-2 bg-black/60 px-2 py-1 rounded text-xs font-bold text-violet-300">HD</div>
+        <button class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
+          <div class="w-12 h-12 rounded-full bg-violet-600 flex items-center justify-center hover:bg-violet-500 transition">
+            <i class="fas fa-play text-white"></i>
+          </div>
+        </button>
+      </div>
+
+      <div class="p-3">
+        <h3 class="text-md font-semibold text-violet-300 truncate">{{ anime.title }}</h3>
+        <p class="text-xs text-gray-400 mt-1 flex justify-between">
+          <span>{{ anime.genres }}</span>
+          <span class="text-yellow-400"><i class="fas fa-star mr-1"></i>{{ anime.score }}</span>
+        </p>
+      </div>
+
+    </div>
+  </a>
+{% endfor %}
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
